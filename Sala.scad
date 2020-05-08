@@ -8,7 +8,7 @@ sharp = 1*.2; 	// radius for sharper edges
 /* [Furniture Type] */
 
 //Escolher o Sofa.
-escolha = 5; //	[1:Sofá Pequeno,2:Sofá Grande,3:Estante Sala,4:Móvel TV, 5:Móvel CDs]
+escolha = 8; //	[1:Sofá Pequeno,2:Sofá Grande,3:Estante Sala,4:Móvel TV, 5:Móvel CDs, 6:Puff Sala, 7: Coluna Sala, 8: Mesa Sala]
 
 main(); // build it!
 
@@ -20,6 +20,9 @@ module main(){
 	if (escolha==3) estanteSala();
 	if (escolha==4) movelTV();
 	if (escolha==5) movelCD();
+	if (escolha==6) puff();
+	if (escolha==7) colunaSala();
+	if (escolha==8) mesaSala();
 }
 
 module estanteSala() {
@@ -34,49 +37,141 @@ module estanteSala() {
 	}
 }
 
+module puff() {
+	scale(s)
+	union(){
+		depth = 71;
+		length = 71;
+		height = 27;
+		heightCushion = 10;
+		espFeet = 2.5;
+		heightFeet = 4;
+		depthFeet = 8;
+		lengthFeet = 8;
+		translate([espFeet,espFeet,-heightFeet + 1]) cuboid(depthFeet,lengthFeet,heightFeet + 1,soft);
+        translate([depth - depthFeet - espFeet,espFeet,-heightFeet]) cuboid(depthFeet,lengthFeet,heightFeet + 1,soft);
+        translate([espFeet,length - depthFeet - espFeet,-heightFeet]) cuboid(depthFeet,lengthFeet,heightFeet + 1,soft);
+        translate([depth - depthFeet - espFeet,length - lengthFeet - espFeet,-heightFeet]) cuboid(depthFeet,lengthFeet,heightFeet + 1,soft);
+		cuboid(depth,length,height,soft*5);
+		translate([0,0,height]) cuboid(depth,length,heightCushion,soft*9);
+	}
+}
+
+module colunaSala() {
+	scale(s)
+	union(){
+		depth = 26;
+		length = 24.5;
+		height = 37.5;
+		depth2 = 1;
+		length2 = 21;
+		length3 = 16;
+		height2 = 36;
+		difference() {
+			translate([-0.5,length/2,height-10]) rotate([0,90,0]) cylinder(depth/2,3.5,3.5);
+			translate([-1.1,length/2,height-10]) rotate([0,90,0]) cylinder(depth/2,3,3);
+		}
+		difference() {
+			translate([-1,length/2-9.5/2,5.5]) cuboid(5,9.5,8,soft);
+			translate([-1.1,length/2-6.5/2,7]) cuboid(5,6.5,5,soft);
+		}
+		difference() {
+			cuboid(depth,length,height,soft*2); //body
+			translate([0,length/2,height-10]) rotate([0,90,0]) cylinder(depth/2,3,3);
+			translate([-1.1,length/2-6.5/2,7]) cuboid(5,6.5,5,soft);
+		}
+		hull() {
+			translate([depth,(length-length2)/2,(height-height2)/2]) cuboid(depth2/2,length2,height2,soft);
+			translate([depth+depth2/2,(length-length3)/2,(height-height2)/2]) cuboid(depth2/2,length3,height2,soft);
+		} //front
+	}
+}
+
+module TV() {
+	scale(s)
+	union(){
+		
+	}
+}
+
+module mesaSala() {
+	scale(s)
+	union(){
+		color("blue") translate([110/2,55,0]) oval(55,55,3);
+		color("blue") translate([0,55,0]) cube([110,40,3]);
+		color("blue") translate([110/2,55+40,0]) oval(55,55,3);
+
+		color("blue") translate([0,55,1.5]) rotate([270,0,0]) cylinder(40,1.5,1.5);
+		color("blue") translate([110,55,1.5]) rotate([270,0,0]) cylinder(40,1.5,1.5);
+		color("blue") translate([110/2,55,1.5])#rotate_extrude()translate([55,0,0])circle(r=1.5); 
+		color("blue") translate([110/2,55+40,1.5])#rotate_extrude()translate([55,0,0])circle(r=1.5); 
+
+
+		difference() {
+			translate([110/2,75,-6]) cylinder(8,50.5,50.5);
+			translate([110/2,75,-7]) cylinder(8,49,49);
+		}
+		// translate([110/2,75,-6]) cylinder(9,5.5,5.5); //temp
+		translate([110/2,75,-6-66]) {
+			// rotate([0, 0, 45]) translate([-2.75,-2.75,0]) cuboid(5.5,5.5,66+7,soft*2);
+			rotate([0, 0, 45]) translate([-2.75 + 101/2 -1,-2.75,0]) cuboid(5.5,5.5,66+7,soft);
+			rotate([0, 0, 45]) translate([-2.75,-2.75 +101/2-1,0])  cuboid(5.5,5.5,66+7,soft);
+			rotate([0, 0, 45]) translate([-2.75 ,-2.75 - 101/2 +1,0])  cuboid(5.5,5.5,66+7,soft);
+			rotate([0 ,0, 45]) translate([-2.75 -101/2+1,-2.75,0]) cuboid(5.5,5.5,66+7,soft);
+		}
+		translate([110/2,75,-6-66+13.5]) {
+			rotate([0, 0, 45]) translate([-51,-4/2,0]) cuboid(102,4,5.2,sharp);
+			rotate([0, 0, 135]) translate([-51,-4/2,0]) cuboid(102,4,5.2,sharp);
+		}
+	}
+}
+
+module oval(w,h, height, center = false) {
+ scale([1, h/w, 1]) cylinder(h=height, r=w, center=center);
+}
+
 module movelTV() {
 	scale(s)
 	union(){
 		// difference () {
 		cil = 4;
 		offset = 2.5;
-		// cuboid(60,181,3.5,soft); //base
-		// translate([offset,offset,0]) peMovelTV();
-		// translate([60 - cil - offset,offset,0]) peMovelTV();
-		// translate([offset,181 - cil - offset,0]) peMovelTV();
-		// translate([60 - cil - offset,181 - cil - offset,0]) peMovelTV();
-		// translate([offset,90.5-cil,0]) peMovelTV();
-		// translate([60 - cil - offset,90.5 - cil,0]) peMovelTV();
+		cuboid(60,181,3.5,soft); //base
+		translate([offset,offset,0]) peMovelTV();
+		translate([60 - cil - offset,offset,0]) peMovelTV();
+		translate([offset,181 - cil - offset,0]) peMovelTV();
+		translate([60 - cil - offset,181 - cil - offset,0]) peMovelTV();
+		translate([offset,90.5-cil,0]) peMovelTV();
+		translate([60 - cil - offset,90.5 - cil,0]) peMovelTV();
 		// // }
 		
-		// translate([0,0,31-3.5]) cuboid(60,135,3.5,soft); //topo
-		// cuboid(60,2.5,31,soft); //esquerda
-		// translate([0,135-2.5,0]) cuboid(60,2.5,31,soft); //direita
-		// translate([0,94-2.5,0]) cuboid(60,2.5,31,soft); //meio vert
+		translate([0,0,31-3.5]) cuboid(60,135,3.5,soft); //topo
+		cuboid(60,2.5,31,soft); //esquerda
+		translate([0,135-2.5,0]) cuboid(60,2.5,31,soft); //direita
+		translate([0,94-2.5,0]) cuboid(60,2.5,31,soft); //meio vert
 		translate([10,94,3.5]){
 			esp =3;
-			// translate([-10,0,0]){
-			// 	translate([0,-3.5+esp,-1]) railMovelTV();
-			// 	translate([0,135-94-2.5-esp-1.5,-1]) railMovelTV();
-			// 	translate([0,-3.5+esp,31-3.5-3.5-2]) railMovelTV();
-			// 	translate([0,135-94-2.5-esp-1.5,31-3.5-3.5-2]) railMovelTV();
-			// }
-			translate([0,esp,esp]) cuboid(50,2,31-7-esp-esp,sharp); 
-			translate([0,135-94-2.5-esp-2,esp]) cuboid(50,2,31-7-esp-esp,sharp); 
-			translate([0,esp,esp]) cuboid(50,135-94-2.5-esp-esp,1.5,sharp); 
-			// translate([0,esp,31-3.5-3.5-esp-1.5]) cuboid(50,135-94-2.5-esp-esp,1.5,sharp); 
-			translate([0,esp,esp]) cuboid(3,135-94-2.5-esp-esp,31-7-esp-esp,sharp); 
-			// translate([50-1,0,0]) cuboid(2.5,135-94-2.5,31-7,sharp); 
-			hull() {
-				translate([50-1,0,0]) cuboid(1.5,135-94-2.5,31-7,sharp); 
-				translate([50,4,4]) rotate([0,90,0]) cylinder(1.5,2,1.5);
-				translate([50,135-94-2.5-4,4]) rotate([0,90,0]) cylinder(1.5,2,1.5);
-				translate([50,4,31-3.5-3.5-4]) rotate([0,90,0]) cylinder(1.5,2,1.5);
-				translate([50,135-94-2.5-4,31-3.5-3.5-4]) rotate([0,90,0]) cylinder(1.5,2,1.5);
+			translate([-10,0,0]){
+				translate([0,-3.5+esp,-1]) cube([55,135-94,3]);
+				translate([0,-3.5+esp,31-3.5-3.5-2]) railMovelTV();
+				translate([0,135-94-2.5-esp-1.5,31-3.5-3.5-2]) railMovelTV();
 			}
+			// translate([0,esp-1,esp]) cuboid(50,2,31-7-esp-esp-1,sharp); 
+			// translate([0,135-94-2.5-esp-1,esp]) cuboid(50,2,31-7-esp-esp-1,sharp); 
+			// translate([0,esp,esp]) cuboid(50,135-94-2.5-esp-esp,1.5,sharp); 
+			//// translate([0,esp,31-3.5-3.5-esp-1.5]) cuboid(50,135-94-2.5-esp-esp,1.5,sharp); 
+			// translate([0,esp,esp]) cuboid(3,135-94-2.5-esp-esp,31-7-esp-esp-1,sharp); 
+			// translate([50-1,0,0]) cuboid(2.5,135-94-2.5,31-7,sharp); 
+			// hull() {
+			// 	translate([50-1,0,0]) cuboid(1.5,135-94-2.5,31-7,sharp); 
+			// 	translate([50,4,4]) rotate([0,90,0]) cylinder(1.5,2,1.5);
+			// 	translate([50,135-94-2.5-4,4]) rotate([0,90,0]) cylinder(1.5,2,1.5);
+			// 	translate([50,4,31-3.5-3.5-4]) rotate([0,90,0]) cylinder(1.5,2,1.5);
+			// 	translate([50,135-94-2.5-4,31-3.5-3.5-4]) rotate([0,90,0]) cylinder(1.5,2,1.5);
+			// }
 		} 
-		// translate([0,0,17-2]) cuboid(60,94,2,soft); //meio horiz
-		// translate([0,0,0]) cuboid(2,135,31,soft); //tras
+		translate([0,0,17-2]) cuboid(60,94,2,soft); //meio horiz
+		translate([0,0,0]) cuboid(2,135,31,soft); //tras
 	}
 }
 
