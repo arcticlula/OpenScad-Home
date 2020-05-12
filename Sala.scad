@@ -8,7 +8,7 @@ sharp = 1*.2; 	// radius for sharper edges
 /* [Furniture Type] */
 
 //Escolher o Sofa.
-escolha = 8; //	[1:Sofá Pequeno,2:Sofá Grande,3:Estante Sala,4:Móvel TV, 5:Móvel CDs, 6:Puff Sala, 7: Coluna Sala, 8: Mesa Sala]
+escolha = 9; //	[1:Sofá Pequeno,2:Sofá Grande,3:Estante Sala,4:Móvel TV, 5:Móvel CDs, 6:Puff Sala, 7: Coluna Sala, 8: Mesa Sala, 9:Mesinha Sala]
 
 main(); // build it!
 
@@ -23,6 +23,7 @@ module main(){
 	if (escolha==6) puff();
 	if (escolha==7) colunaSala();
 	if (escolha==8) mesaSala();
+	if (escolha==9) mesinhaSala();
 }
 
 module estanteSala() {
@@ -114,15 +115,65 @@ module mesaSala() {
 		// translate([110/2,75,-6]) cylinder(9,5.5,5.5); //temp
 		translate([110/2,75,-6-66]) {
 			// rotate([0, 0, 45]) translate([-2.75,-2.75,0]) cuboid(5.5,5.5,66+7,soft*2);
-			rotate([0, 0, 45]) translate([-2.75 + 101/2 -1,-2.75,0]) cuboid(5.5,5.5,66+7,soft);
-			rotate([0, 0, 45]) translate([-2.75,-2.75 +101/2-1,0])  cuboid(5.5,5.5,66+7,soft);
-			rotate([0, 0, 45]) translate([-2.75 ,-2.75 - 101/2 +1,0])  cuboid(5.5,5.5,66+7,soft);
-			rotate([0 ,0, 45]) translate([-2.75 -101/2+1,-2.75,0]) cuboid(5.5,5.5,66+7,soft);
+			rotate([0, 0, 45]) translate([-2.75 + 101/2 -1,-2.75,0]) cuboid(5.5,5.5,66+7,sharp);
+			rotate([0, 0, 45]) translate([-2.75,-2.75 +101/2-1,0])  cuboid(5.5,5.5,66+7,sharp);
+			rotate([0, 0, 45]) translate([-2.75 ,-2.75 - 101/2 +1,0])  cuboid(5.5,5.5,66+7,sharp);
+			rotate([0 ,0, 45]) translate([-2.75 -101/2+1,-2.75,0]) cuboid(5.5,5.5,66+7,sharp);
 		}
 		translate([110/2,75,-6-66+13.5]) {
 			rotate([0, 0, 45]) translate([-51,-4/2,0]) cuboid(102,4,5.2,sharp);
 			rotate([0, 0, 135]) translate([-51,-4/2,0]) cuboid(102,4,5.2,sharp);
 		}
+	}
+}
+
+module mesinhaSala() {
+	scale(s)
+	union(){
+		topo();
+		baixo();
+		pernas();
+	}
+	module topo() {
+		depth = 55;
+		depth2 = 43;
+		depth3 = 38;
+		length = 90;
+		length2 = 78.5;
+		length3 = 73;
+		height = 2.2;
+		points = [[-length/2,depth2/2],[-length2/2,depth/2],[length2/2,depth/2],[length/2,depth2/2],[length/2,-depth2/2],[length2/2,-depth/2],[-length2/2,-depth/2],[-length/2,-depth2/2],[-length2/2 +2 ,depth3/2 - 2],[-length3/2 +2,depth2/2 - 2],[length3/2 -2,depth2/2 -2],[length2/2 -2,depth3/2 -2],[length2/2 -2,-depth3/2 +2],[length3/2 - 2,-depth2/2 +2],[-length3/2 +2,-depth2/2 +2],[-length2/2 +2,-depth3/2 +2]];
+		points2 = [[-length/2,depth2/2],[-length2/2,depth/2],[length2/2,depth/2],[length/2,depth2/2],[length/2,-depth2/2],[length2/2,-depth/2],[-length2/2,-depth/2],[-length/2,-depth2/2],[-length2/2,depth3/2],[-length3/2,depth2/2],[length3/2,depth2/2],[length2/2,depth3/2],[length2/2,-depth3/2],[length3/2,-depth2/2],[-length3/2,-depth2/2],[-length2/2,-depth3/2]];
+		color("orange") translate([0,0,43.3]) linear_extrude(1.2) polygon(points,[[0,1,2,3,4,5,6,7],[8,9,10,11,12,13,14,15]],1);
+		color("red") translate([0,0,44.5]) linear_extrude(1) polygon(points2,[[0,1,2,3,4,5,6,7],[8,9,10,11,12,13,14,15]],1);
+	}
+	module baixo() {
+		depth = 46.8;
+		depth2 = 37.2;
+		length = 81.8;
+		length2 = 72;
+		length3 = 61;
+		height = 2.2;
+		points = [[-length/2,depth2/2 + 3],[-length2/2 - 3,depth/2],[length2/2 + 3,depth/2],[length/2,depth2/2 + 3],[length/2,-depth2/2 -3],[length2/2 + 3,-depth/2],[-length2/2 - 3,-depth/2],[-length/2,-depth2/2 - 3],[-length2/2,depth2/2],[length2/2,depth2/2],[length2/2,-depth2/2],[-length2/2,-depth2/2]];
+		translate([0,0,11]) linear_extrude(height) polygon(points,[[0,1,2,3,4,5,6,7],[8,9,10,11]],1);
+		for (i=[0:6]) {
+			translate([-length3/2 +(length3/6 -2/3)*i,-depth/2,11]) cuboid(4,depth,height,sharp);
+		}
+	}
+	module pernas() {
+		depth = 51;
+		depth2 = 36.2;
+		length = 86;
+		length2 = 71;
+		height = 45;
+		points1 = [[-length/2,-depth2/2],[-length/2,-2.5-depth2/2],[-2.5-length2/2,-depth/2],[-length2/2,-depth/2]];
+		points2 = [[length2/2,depth/2],[length2/2 + 2.5,depth/2],[length/2,depth2/2 + 2.5],[length/2,depth2/2]];
+		points3 = [[-length2/2,depth/2],[-length2/2 - 2.5,depth/2],[-length/2,depth2/2 + 2.5],[-length/2,depth2/2]];
+		points4 = [[length2/2,-depth/2],[length2/2 + 2.5,-depth/2],[length/2,-depth2/2 - 2.5],[length/2,-depth2/2]];
+		color("blue") linear_extrude(height) polygon(points1,[[0,1,2,3]],1);
+		color("blue") linear_extrude(height) polygon(points2,[[0,1,2,3]],1);
+		color("blue") linear_extrude(height) polygon(points3,[[0,1,2,3]],1);
+		color("blue") linear_extrude(height) polygon(points4,[[0,1,2,3]],1);
 	}
 }
 
